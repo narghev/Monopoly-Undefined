@@ -10,8 +10,12 @@ work on the files;
 
 Write in the FB group to make sure whether something has been changed in the origin repository.;
 
-$git fetch https://github.com/narghev/Monopoly-Undefined;
+$git fetch upstream;
 
-$git rebase upstream;
+$git add .;
 
-$git push -u origin master
+$git commit -m "<The changes that have been made>";
+
+$git rebase origin;
+
+$git push -u origin master;
