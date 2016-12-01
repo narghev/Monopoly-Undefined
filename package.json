@@ -4,7 +4,7 @@
   "description": "Final project of Introduction To Computer Science course.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "app": "nodemon server.js"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,8 @@
     "express": "^4.14.0",
     "react": "^15.4.1",
     "socket.io": "^1.7.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }
