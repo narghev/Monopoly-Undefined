@@ -227,6 +227,8 @@ const gameStart = ()=>{
     updatePlayerInfo(players[i]);
   }
   updateMapInfoPlayerPos();
+  for (let i of players)
+    io.sockets.emit('playerImages', i.figure);
 }
 
 const who = (id)=>{
@@ -237,7 +239,7 @@ const who = (id)=>{
 }
 
 const trowDice = ()=>{
-  return Math.floor(Math.random()*7);
+  return (1+Math.floor(Math.random()*6));
 }
 
 app.get('/', (req, res)=>{
