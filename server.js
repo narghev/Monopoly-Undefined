@@ -223,8 +223,9 @@ const updateMapInfoPlayerPos = ()=>{
 
 const gameStart = ()=>{
   console.log("4 players are ready, the games ha started.");
-  for (let i=0; i<players.length;i++)
+  for (let i=0; i<players.length;i++){
     updatePlayerInfo(players[i]);
+  }
   updateMapInfoPlayerPos();
 }
 
@@ -233,6 +234,10 @@ const who = (id)=>{
     if (i.socketId===id)
       return players.indexOf(i);
   }
+}
+
+const trowDice = ()=>{
+  return Math.floor(Math.random()*7);
 }
 
 app.get('/', (req, res)=>{
@@ -251,8 +256,12 @@ io.on('connection', (socket)=>{
   if (players.length===4)
     gameStart();
 
-  socket.on('moveTheFigure', (a)=>{
-    console.log(a);
+  socket.on('moveTheFigure', ()=>{
+    let dice1 = trowDice();
+    let dice2 = trowDice();
+    io.sockets.emit("diceResults", dice1, dice2);
+    players[who(socket.id)].move(dice1+dice2);
+    updateMapInfoPlayerPos();
   });
 
 });
