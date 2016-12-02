@@ -10,9 +10,9 @@ work on the files;
 
 Write in the FB group to make sure whether something has been changed in the origin repository.;
 
-$git fetch upstream;
-
 $git add .;
+
+$git fetch upstream;
 
 $git commit -m "<The changes that have been made>";
 
