@@ -14,7 +14,7 @@ class Player {
     this.id = id;
     this.money = 1500;
     this.figure = "public/figures/fig"+players.length+".png";
-    this.shops = [];
+    this.property = [];
     this.currentField = 0;
     this.inJail = false;
   }
@@ -47,7 +47,7 @@ class RegularStreet {
   }
 }
 
-const chanceArr = [{text: "", func()=>{}},
+const chanceArr = [{text: "", func(){}},
   {text: "", func(){}},
   {text: "", func(){}},
   {text: "", func(){}},
@@ -213,16 +213,33 @@ regStrT8Arr[0],
 {type: 11, fieldData: new LuxuryTax()},
 regStrT8Arr[1]];
 
+const updatePlayerInfo = (player)=>{
+    io.to(player.socketId).emit('playerInfoUpdate', JSON.stringify({socketMoney: player.money, socketProperty: player.property}));
+}
+
+const updateMapInfoPlayerPos = ()=>{
+  io.sockets.emit('mapInfoPlayerPos', [players[0].currentField, players[1].currentField, players[2].currentField, players[3].currentField]);
+}
+
 const gameStart = ()=>{
-  console.log("4 players are ready, the games has started.");
-  io.sockets.emit("gameStarted");
+  console.log("4 players are ready, the games ha started.");
+  for (let i=0; i<players.length;i++)
+    updatePlayerInfo(players[i]);
+  updateMapInfoPlayerPos();
+}
+
+const who = (id)=>{
+  for (let i of players){
+    if (i.socketId===id)
+      return players.indexOf(i);
+  }
 }
 
 app.get('/', (req, res)=>{
   if (players.length < 4)
     res.sendFile(__dirname + '/public/index.html');
   else
-    res.end(404);
+    res.end("Sorry, the game is full.");
 });
 
 app.use(express.static('public'));
@@ -233,4 +250,9 @@ io.on('connection', (socket)=>{
 
   if (players.length===4)
     gameStart();
+
+  socket.on('moveTheFigure', (a)=>{
+    console.log(a);
+  });
+
 });
