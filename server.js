@@ -346,13 +346,13 @@ const updateMapInfoPlayerPos = ()=>{
 }
 
 const gameStart = ()=>{
-  console.log("4 players are ready, the games ha started.");
+  console.log("4 players are ready, the games has started.");
+  console.log("It's player0's turn.");
   for (let i=0; i<players.length;i++){
     updatePlayerInfo(players[i]);
   }
   updateMapInfoPlayerPos();
-  for (let i of players)
-    io.sockets.emit('playerImages', i.figure);
+  yourTurn(players[turn]);
 }
 
 const who = (id)=>{
@@ -365,6 +365,17 @@ const who = (id)=>{
 const trowDice = ()=>{
   return (1+Math.floor(Math.random()*6));
 }
+
+let turnTime;
+let turn = 0;
+const yourTurn = (player)=>{
+  io.to(player.socketId).emit("itsYourTurn");
+  turnTime = setTimeout(()=>{
+    turn=(turn+1)%4;
+    console.log("Player"+(turn-1)+" failed to play in time. Now it's player"+turn+"'s turn.");
+    yourTurn(players[turn]);
+  }, 30000);
+};
 
 app.get('/', (req, res)=>{
   if (players.length < 4)
@@ -383,14 +394,23 @@ io.on('connection', (socket)=>{
     gameStart();
 
   socket.on('moveTheFigure', ()=>{
-    let dice1 = trowDice();
-    let dice2 = trowDice();
-    io.sockets.emit("diceResults", dice1, dice2);
-    players[who(socket.id)].move(dice1+dice2);
-    updateMapInfoPlayerPos();
-    if (map[players[who(socket.id)].currentField].type===4)
-      chance.show(players[who(socket.id)]);
-    else if (map[players[who(socket.id)].currentField].type===1)
-      chest.show(players[who(socket.id)]);
+    const sender = who(socket.id);
+    if (sender===turn)
+    {
+      clearTimeout(turnTime);
+      console.log("player"+turn+" moved.");
+
+      let dice1 = trowDice();
+      let dice2 = trowDice();
+      io.sockets.emit("diceResults", dice1, dice2);
+      players[sender].move(dice1+dice2);
+      updateMapInfoPlayerPos();
+      if (map[players[sender].currentField].type===4)
+        chance.show(players[sender]);
+      else if (map[players[sender].currentField].type===1)
+        chest.show(players[sender]);
+      turn=(turn+1)%4;
+      yourTurn(players[turn]);
+    }
   });
 });
