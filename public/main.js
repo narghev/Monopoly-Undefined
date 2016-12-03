@@ -1,7 +1,7 @@
 'use strict'
 
 const socket = io();
-const playerImgs = ["fig0.png", "fig1.png", "fig2.png", "fig3.png"];
+const playerImgs = ["figures/fig0.png", "figures/fig1.png", "figures/fig2.png", "figures/fig3.png"];
 
 socket.on("playerInfoUpdate", (playerData)=>{
   let money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
