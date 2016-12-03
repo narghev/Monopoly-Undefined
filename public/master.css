@@ -1,5 +1,14 @@
+body{
+  background-repeat: repeat-y;  ;
+  background-image: url('body-background.jpg');
+  background-size: 100%;
+}
 canvas{
-  background-image: url('background.png');
+  background-image: url('game-background.jpg');
   background-size: 700px;
   background-repeat: no-repeat;
+  position: absolute;
+  top: 42px;
+  border: solid 5px #520303;
+  border-radius: 10px;
 }

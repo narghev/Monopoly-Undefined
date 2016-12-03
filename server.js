@@ -13,7 +13,7 @@ class Player {
     this.socketId = socketId;
     this.id = id;
     this.money = 1500;
-    this.figure = "public/figures/fig"+players.length+".png";
+    this.figure = "fig"+players.length+".png";
     this.property = [];
     this.hotelN = 0;
     this.houseN = 0;
