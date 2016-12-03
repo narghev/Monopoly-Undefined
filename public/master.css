@@ -1,3 +1,5 @@
 canvas{
   background-image: url('background.png');
+  background-size: 700px;
+  background-repeat: no-repeat;
 }

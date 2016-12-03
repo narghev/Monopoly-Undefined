@@ -18,12 +18,12 @@ socket.on("getTheCard", (text)=>{
 
 window.onload = ()=>{
   const canvas = document.getElementById('canvas');
-  const context = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d');
   socket.on("mapInfoPlayerPos", (mapData)=>{
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     console.log(mapData);
-    //for (let i=0; i<mapData.length; i++)
-      //playerPositionUpdate(mapData[i], playerImgs[i]);
+    for (let i=0; i<mapData.length; i++)
+      playerPositionUpdate(ctx, mapData[i], playerImgs[i]);
     /*
       An array, mapData[0] is the player1 position, mapData[1] is the player2 position,
       mapData[2] is the player3 position, mapData[3] is the player4 position.
