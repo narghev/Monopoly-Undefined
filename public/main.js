@@ -1,7 +1,11 @@
 'use strict'
 
 const socket = io();
-const playerImgs = ["figures/fig0.png", "figures/fig1.png", "figures/fig2.png", "figures/fig3.png"];
+const playerImgs = [new Image(), new Image(), new Image(), new Image()];
+playerImgs[0].src = "figures/fig0.png";
+playerImgs[1].src = "figures/fig1.png";
+playerImgs[2].src = "figures/fig2.png";
+playerImgs[3].src = "figures/fig3.png";
 
 socket.on("playerInfoUpdate", (playerData)=>{
   let money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
@@ -25,7 +29,16 @@ window.onload = ()=>{
     }
   });
   socket.on("itsYourTurn", ()=>{
-    console.log("it's my turn");
+    yourTurnAnimation();
+  });
+  socket.on("notYourTurn", (n)=>{
+    notYourTurnAnimation(n);
+  });
+  socket.on("imprisoned", (n)=>{
+    console.log("player"+n+" got imprisoned.");
+  });
+  socket.on("buyMe?", (n)=>{
+    console.log("do you want to buy this street?");
   });
     //socket.emit('moveTheFigure');
 }

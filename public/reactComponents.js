@@ -1,4 +1,4 @@
-'use strict'
+/*'use strict'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,3 +12,4 @@ class Dice extends React.Component {
 
 
 };
+*/

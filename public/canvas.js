@@ -3,8 +3,6 @@
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const playerPositionUpdate = (canvas, fieldN, playerImg)=>{
-  const figure = new Image();
-  figure.src = playerImg;
   let x = 631 ,y = 650;
   if (fieldN > 0 && fieldN < 10){
     y = 650;
@@ -34,7 +32,5 @@ const playerPositionUpdate = (canvas, fieldN, playerImg)=>{
     x=631;
     y=37+(58*(fieldN%10));
   }
-  figure.onload = () => {
-    ctx.drawImage(figure, x, y, 50, 50);
-  }
+  ctx.drawImage(playerImg, x, y, 50, 50);
 };

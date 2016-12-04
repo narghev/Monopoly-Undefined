@@ -10,6 +10,7 @@ const players = [];
 
 class Player {
   constructor(id, socketId){
+    this.previousField = null;
     this.socketId = socketId;
     this.id = id;
     this.money = 1500;
@@ -23,7 +24,10 @@ class Player {
     this.freeFromJailCard = false;
   }
   move(fields){
+    this.previousField = this.currentField;
     this.currentField = (40+this.currentField + fields)%40;
+    if (this.previousField > this.currentField)
+      this.money+=200;updatePlayerInfo(this);
   }
 }
 
@@ -41,13 +45,17 @@ class RegularStreet {
     type 8 - Dark-Blue
   */
 
-  constructor(price, rent, group){
+  constructor(price, rent, group, index){
     this.owner = null;
     this.price = price;
     this.hotel = false;
     this.houses = 0;
     this.rent = rent;
     this.group = group;
+    this.idex = index;
+  }
+  buyMe(player){
+    io.to(player.socketId).emit("buyMe?", this.index);
   }
 }
 
@@ -142,10 +150,6 @@ class TrainStation {
   */
 }
 
-class IncomeTax {
-  //type 2;
-}
-
 class LuxuryTax {
   //type 11;
 }
@@ -190,7 +194,7 @@ const chestArr = [{text: "Income tax refund (Collect 20$).", func(player){
     player.money += 40;
     updatePlayerInfo(player);
   }},
-  {text: "Life insurance matures (Collect 100$).", func(){
+  {text: "Life insurance matures (Collect 100$).", func(player){
     player.money += 100;
     updatePlayerInfo(player);
   }},
@@ -258,32 +262,28 @@ class Jail {
 
 }
 
-class GoToJail {
-  //type 10;
-}
-
-const regStrT1Arr = [{type: 0, fieldData: new RegularStreet(60,2,1)},
-  {type: 0, fieldData: new RegularStreet(60,4,1)}];
-const regStrT2Arr = [{type: 0, fieldData: new RegularStreet(100,6,2)},
-  {type: 0, fieldData: new RegularStreet(100,6,2)},
-  {type: 0, fieldData: new RegularStreet(120,8,2)}];
-const regStrT3Arr = [{type: 0, fieldData: new RegularStreet(140,10,3)},
-  {type: 0, fieldData: new RegularStreet(140,10,3)},
-  {type: 0, fieldData: new RegularStreet(160,12,3)}];
-const regStrT4Arr = [{type: 0, fieldData: new RegularStreet(180,14,4)},
-  {type: 0, fieldData: new RegularStreet(180,14,4)},
-  {type: 0, fieldData: new RegularStreet(200,16,4)}];
-const regStrT5Arr = [{type: 0, fieldData: new RegularStreet(220,18,5)},
-  {type: 0, fieldData: new RegularStreet(220,18,5)},
-  {type: 0, fieldData: new RegularStreet(240,20,5)}];
-const regStrT6Arr = [{type: 0, fieldData: new RegularStreet(260,22,6)},
-  {type: 0, fieldData: new RegularStreet(260,22,6)},
-  {type: 0, fieldData: new RegularStreet(280,24,6)}];
-const regStrT7Arr = [{type: 0, fieldData: new RegularStreet(300,26,7)},
-  {type: 0, fieldData: new RegularStreet(300,26,7)},
-  {type: 0, fieldData: new RegularStreet(320,28,7)}];
-const regStrT8Arr = [{type: 0, fieldData: new RegularStreet(350,35,8)},
-  {type: 0, fieldData: new RegularStreet(350,35,8)}];
+const regStrT1Arr = [{type: 0, fieldData: new RegularStreet(60,2,1,1)},
+  {type: 0, fieldData: new RegularStreet(60,4,1,3)}];
+const regStrT2Arr = [{type: 0, fieldData: new RegularStreet(100,6,2,6)},
+  {type: 0, fieldData: new RegularStreet(100,6,2,8)},
+  {type: 0, fieldData: new RegularStreet(120,8,2,9)}];
+const regStrT3Arr = [{type: 0, fieldData: new RegularStreet(140,10,3,11)},
+  {type: 0, fieldData: new RegularStreet(140,10,3,13)},
+  {type: 0, fieldData: new RegularStreet(160,12,3,14)}];
+const regStrT4Arr = [{type: 0, fieldData: new RegularStreet(180,14,4,16)},
+  {type: 0, fieldData: new RegularStreet(180,14,4,18)},
+  {type: 0, fieldData: new RegularStreet(200,16,4,19)}];
+const regStrT5Arr = [{type: 0, fieldData: new RegularStreet(220,18,5,21)},
+  {type: 0, fieldData: new RegularStreet(220,18,5,23)},
+  {type: 0, fieldData: new RegularStreet(240,20,5,24)}];
+const regStrT6Arr = [{type: 0, fieldData: new RegularStreet(260,22,6,26)},
+  {type: 0, fieldData: new RegularStreet(260,22,6,27)},
+  {type: 0, fieldData: new RegularStreet(280,24,6,29)}];
+const regStrT7Arr = [{type: 0, fieldData: new RegularStreet(300,26,7,31)},
+  {type: 0, fieldData: new RegularStreet(300,26,7,32)},
+  {type: 0, fieldData: new RegularStreet(320,28,7,34)}];
+const regStrT8Arr = [{type: 0, fieldData: new RegularStreet(350,35,8,37)},
+  {type: 0, fieldData: new RegularStreet(350,35,8,39)}];
 
 const trainStationArr = [{type: 3, fieldData: new TrainStation()},
   {type: 3, fieldData: new TrainStation()},
@@ -300,7 +300,7 @@ const map = [{type: 8},
 regStrT1Arr[0],
 {type: 1},
 regStrT1Arr[1],
-{type: 2, fieldData: new IncomeTax()},
+{type: 2},
 trainStationArr[0],
 regStrT2Arr[0],
 {type: 4},
@@ -326,7 +326,7 @@ regStrT6Arr[0],
 regStrT6Arr[1],
 utilitiesArr[1],
 regStrT6Arr[2],
-{type: 10, fieldData: new GoToJail()},
+{type: 10},
 regStrT7Arr[0],
 regStrT7Arr[1],
 {type: 1},
@@ -334,7 +334,7 @@ regStrT7Arr[2],
 trainStationArr[3],
 {type: 4},
 regStrT8Arr[0],
-{type: 11, fieldData: new LuxuryTax()},
+{type: 11},
 regStrT8Arr[1]];
 
 const updatePlayerInfo = (player)=>{
@@ -371,8 +371,8 @@ let turn = 0;
 const yourTurn = (player)=>{
   io.to(player.socketId).emit("itsYourTurn");
   turnTime = setTimeout(()=>{
+    console.log("Player"+(turn)+" failed to play in time. Now it's player"+(turn+1)+"'s turn.");
     turn=(turn+1)%4;
-    console.log("Player"+(turn-1)+" failed to play in time. Now it's player"+turn+"'s turn.");
     yourTurn(players[turn]);
   }, 30000);
 };
@@ -405,12 +405,35 @@ io.on('connection', (socket)=>{
       io.sockets.emit("diceResults", dice1, dice2);
       players[sender].move(dice1+dice2);
       updateMapInfoPlayerPos();
-      if (map[players[sender].currentField].type===4)
+      if (map[players[sender].currentField].type===4)//chance
         chance.show(players[sender]);
-      else if (map[players[sender].currentField].type===1)
+      else if (map[players[sender].currentField].type===1)//chest
         chest.show(players[sender]);
+      else if (map[players[sender].currentField].type===2){//incomeTax
+        players[sender].money = players[sender].money - ((200 < (players[sender].money*0.1) ? 200 : (players[sender].money*0.1)));
+        updatePlayerInfo(players[sender]);
+      }
+      else if (map[players[sender].currentField].type===10){//goToJail
+        players[sender].inJail = true;
+        players[sender].currentField = 10;
+        map[10].fieldData.currentPrisoners.push(players[sender]);
+        io.sockets.emit("imprisoned", (turn+1));
+        updateMapInfoPlayerPos();
+      }
+      else if (map[players[sender].currentField].type===11){
+          players[sender].money-=100;
+          updatePlayerInfo(players[sender]);
+      }
+      else if (map[players[sender].currentField].type===0){
+        if (map[players[sender].currentField].fieldData.owner===null){
+          map[players[sender].currentField].fieldData.buyMe(players[sender]);
+        }
+      }
       turn=(turn+1)%4;
       yourTurn(players[turn]);
+    }
+    else{
+      io.to(players[sender].socketId).emit("notYourTurn", (turn+1));
     }
   });
 });

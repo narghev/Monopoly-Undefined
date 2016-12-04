@@ -4,11 +4,13 @@ body{
   background-size: 100%;
 }
 canvas{
+  position: absolute;
+  top: 42px;
+}
+#canvas{
   background-image: url('game-background.jpg');
   background-size: 700px;
   background-repeat: no-repeat;
-  position: absolute;
-  top: 42px;
   border: solid 5px #520303;
   border-radius: 10px;
 }
