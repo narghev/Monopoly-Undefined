@@ -96,7 +96,7 @@ const chanceArr = [{text: "They think they can kick you (Go forward 3 spaces).",
     player.money -= player.property.length * 10;
     updatePlayerInfo(player);
   }},
-  {text: "Take a walk on the 5-th avenue (Don’t pay rent).", func(player){
+  {text: "Take a walk on Boardwalk (Don’t pay rent).", func(player){
     player.currentField = 39;
     updateMapInfoPlayerPos();
   }},
