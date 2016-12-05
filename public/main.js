@@ -60,7 +60,7 @@ socket.on("diceResults", (dice1, dice2)=>{
   //dice animation
 });
 socket.on("getTheCard", (text)=>{
-  console.log(text);
+  showCard(text);
 });
 
 window.onload = ()=>{
@@ -72,8 +72,11 @@ window.onload = ()=>{
       playerPositionUpdate(ctx, mapData[i], playerImgs[i]);
     }
   });
+  socket.on("whoseTurn", (n)=>{
+    whoseTurn(n+1);
+  });
   socket.on("gameStarted", ()=>{
-    console.log("started")
+    console.log("started");
     document.getElementById("diceBtn").setAttribute("onclick", "socket.emit('moveTheFigure')");
   });
   socket.on("itsYourTurn", ()=>{

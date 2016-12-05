@@ -25,7 +25,7 @@ const notYourTurnAnimation = (n)=>{
   gradient.addColorStop("1.0", "#000099");
   ctxH.clearRect(0,0,canvasHelper.width, canvasHelper.height);
   ctxH.fillStyle = "rgba(0, 0, 0, " + 0.9 + ")";
-  ctxH.globalAlpha = 0.5;
+  ctxH.globalAlpha = 0.7;
   ctxH.fillRect(0,0,canvasHelper.width, canvasHelper.height);
   ctxH.drawImage(ban, 200,200,300,300);
   ctxH.globalAlpha = 1.0;
@@ -37,4 +37,32 @@ const notYourTurnAnimation = (n)=>{
     ctxH.rotate(-25*Math.PI/180);
     ctxH.clearRect(0,0,canvasHelper.width, canvasHelper.height);
   },3000);
+};
+const showCard = (text)=> {
+  ctxH.clearRect(0,0,canvasHelper.width, canvasHelper.height);
+  ctxH.fillStyle = "rgba(0, 0, 0, " + 0.9 + ")";
+  ctxH.fillRect(0,0,canvasHelper.width, canvasHelper.height);
+  ctxH.fillStyle = "#f5dd33";
+  ctxH.fillRect(50,200,610,310);
+  ctxH.fillStyle = "black";
+  ctxH.strokeRect(60,210,590,290);
+  ctxH.font = "30px Verdana";
+  ctxH.fillText(text, 75, 350, 565);
+  const cardTimeout = setTimeout(()=>{
+    ctxH.clearRect(0,0,canvasHelper.width, canvasHelper.height);
+  },5000);
+  document.getElementById("canvasHelper").setAttribute("onclick", "ctxH.clearRect(0,0,canvasHelper.width, canvasHelper.height)");
+};
+const whoseTurn = (n)=>{
+  gradient.addColorStop("0", "green");
+  gradient.addColorStop("1.0", "orange");
+  ctxH.clearRect(0,0,canvasHelper.width, canvasHelper.height);
+  ctxH.fillStyle = "rgba(0, 0, 0, " + 0.9 + ")";
+  ctxH.fillRect(0,0,canvasHelper.width, canvasHelper.height);
+  ctxH.font = "50px Verdana";
+  ctxH.fillStyle = gradient;
+  ctxH.fillText("It's Player"+n+"'s Turn!", 180, 350);
+  const animationTimeout = setTimeout(()=>{
+    ctxH.clearRect(0,0,canvasHelper.width, canvasHelper.height);
+  },2000);
 };

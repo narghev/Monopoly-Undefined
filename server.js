@@ -348,12 +348,14 @@ const updateMapInfoPlayerPos = ()=>{
 const gameStart = ()=>{
   console.log("4 players are ready, the games has started.");
   console.log("It's player0's turn.");
-  for (let i=0; i<players.length;i++){
-    updatePlayerInfo(players[i]);
-  }
-  updateMapInfoPlayerPos();
   yourTurn(players[turn]);
-  io.sockets.emit("gameStarted");
+  setTimeout(()=>{
+    for (let i=0; i<players.length;i++){
+      updatePlayerInfo(players[i]);
+    }
+    updateMapInfoPlayerPos();
+    io.sockets.emit("gameStarted");
+  },250);
 }
 
 const who = (id)=>{
@@ -371,6 +373,11 @@ let turnTime;
 let turn = 0;
 const yourTurn = (player)=>{
   io.to(player.socketId).emit("itsYourTurn");
+  for (let i of players){
+    if (i.id!=player.id){
+      io.to(i.socketId).emit("whoseTurn", turn);
+    }
+  }
   turnTime = setTimeout(()=>{
     console.log("Player"+(turn)+" failed to play in time. Now it's player"+(turn+1)+"'s turn.");
     turn=(turn+1)%4;
