@@ -64,12 +64,17 @@ socket.on("getTheCard", (text)=>{
 });
 
 window.onload = ()=>{
+  document.getElementById("diceBtn").setAttribute("style", "left: "+(100+canvas.width)+"px;");
   socket.on("mapInfoPlayerPos", (mapData)=>{
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     console.log(mapData);
     for (let i=0; i<mapData.length; i++){
       playerPositionUpdate(ctx, mapData[i], playerImgs[i]);
     }
+  });
+  socket.on("gameStarted", ()=>{
+    console.log("started")
+    document.getElementById("diceBtn").setAttribute("onclick", "socket.emit('moveTheFigure')");
   });
   socket.on("itsYourTurn", ()=>{
     yourTurnAnimation();
@@ -83,5 +88,4 @@ window.onload = ()=>{
   socket.on("buyMe?", (n)=>{
     console.log("do you want to buy this street?");
   });
-    //socket.emit('moveTheFigure');
 }

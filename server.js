@@ -353,6 +353,7 @@ const gameStart = ()=>{
   }
   updateMapInfoPlayerPos();
   yourTurn(players[turn]);
+  io.sockets.emit("gameStarted");
 }
 
 const who = (id)=>{

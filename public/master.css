@@ -14,3 +14,22 @@ canvas{
   border: solid 5px #520303;
   border-radius: 10px;
 }
+#diceBtn{
+  position: absolute;
+  top: 50px;
+  -webkit-filter: grayscale(100%) blur(2px);
+  filter: grayscale(100%) blur(2px);
+}
+#diceBtn img{
+  position: absolute;
+  width: 150px;
+}
+#diceBtn img:nth-child(2){
+  margin-left: 120px;
+  width: 75px;
+  margin-top: 75px
+}
+#diceBtn:hover{
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+}
