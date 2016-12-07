@@ -1,6 +1,6 @@
 body{
   background-repeat: repeat-y;  ;
-  background-image: url('body-background.jpg');
+  background-image: url('../imgs/body-background.jpg');
   background-size: 100%;
 }
 canvas{
@@ -8,7 +8,7 @@ canvas{
   top: 42px;
 }
 #canvas{
-  background-image: url('game-background.jpg');
+  background-image: url('../imgs/game-background.jpg');
   background-size: 700px;
   background-repeat: no-repeat;
   border: solid 5px #520303;

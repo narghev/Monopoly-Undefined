@@ -2,10 +2,10 @@
 
 const socket = io();
 const playerImgs = [new Image(), new Image(), new Image(), new Image()];
-playerImgs[0].src = "figures/fig0.png";
-playerImgs[1].src = "figures/fig1.png";
-playerImgs[2].src = "figures/fig2.png";
-playerImgs[3].src = "figures/fig3.png";
+playerImgs[0].src = "imgs/figures/fig0.png";
+playerImgs[1].src = "imgs/figures/fig1.png";
+playerImgs[2].src = "imgs/figures/fig2.png";
+playerImgs[3].src = "imgs/figures/fig3.png";
 
 const fields = [
   {index: 0, info: "Starting Point. You get 200$ everytime you pass.", color: "#808080", owner: null, src:null},
@@ -54,7 +54,7 @@ socket.on("playerInfoUpdate", (playerData)=>{
   let money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
   let property = JSON.parse(playerData).socketProperty; //has to be in the player information, top left corner, REACT
   //let cards = JSON.parse(playerData.socketCards); //array, length = 2, boolean values, cards[0]= (true if player has a jail card) cards[1]= (true if player doesnt have to pay rent for the next house he moves to)
-  console.log(money, property);
+  renderMoney();
 });
 socket.on("diceResults", (dice1, dice2)=>{
   //dice animation

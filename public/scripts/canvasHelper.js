@@ -2,7 +2,7 @@ const canvasHelper = document.getElementById('canvasHelper');
 const ctxH = canvasHelper.getContext('2d');
 const gradient = ctxH.createLinearGradient(0, 0, canvasHelper.width, 0);
 const ban = new Image();
-ban.src = "notYourTurn.png";
+ban.src = "imgs/notYourTurn.png";
 const yourTurnAnimation = ()=>{
   gradient.addColorStop("0", "red");
   gradient.addColorStop("0.5", "orange");
