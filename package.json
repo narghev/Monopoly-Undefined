@@ -4,7 +4,8 @@
   "description": "Final project of Introduction To Computer Science course.",
   "main": "server.js",
   "scripts": {
-    "app": "nodemon server.js"
+    "app": "nodemon server.js",
+    "build": "babel --presets react ./public/reactComponents.jsx > ./public/reactComponents.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,13 @@
     "socket.io": "^1.7.1"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
     "nodemon": "^1.11.0"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
   }
 }
