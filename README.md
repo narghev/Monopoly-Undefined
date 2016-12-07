@@ -1,21 +1,15 @@
 # Monopoly-Undefined
 
-fork the Repo (from github);
+clone the repo - $git clone https://github.com/narghev/Monopoly-Undefined.git
 
-$git clone <your repo url>;
+change the directory to the project root directory (where you can see server.js)
 
-$git remote add upstream https://github.com/narghev/Monopoly-Undefined;
+$npm install
 
-work on the files;
+$npm run app
 
-Write in the FB group to make sure whether something has been changed in the origin repository.;
+$node server.js
 
-$git add .;
+open the browser and go to localhost:8080
 
-$git fetch upstream;
-
-$git commit -m "<The changes that have been made>";
-
-$git rebase origin;
-
-$git push -u origin master;
+4 players have to be connected to start the game
