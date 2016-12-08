@@ -5,14 +5,15 @@ body{
 }
 canvas{
   position: absolute;
-  top: 42px;
+  top: 42px ;
 }
 #canvas{
   background-image: url('../imgs/game-background.jpg');
-  background-size: 700px;
+  background-size: inherit;
   background-repeat: no-repeat;
   border: solid 5px #520303;
   border-radius: 10px;
+
 }
 #diceBtn{
   position: absolute;
@@ -38,9 +39,27 @@ canvas{
 }
 #moneyDiv{
   position: absolute;
-  left: 70%;
-  top: 15%;
-  font-size: 200%;
-  color: #317823;
+  color: rgb(9, 173, 200);
+  font-weight: bolder;
+  top:30%;
+  right:27%;
+  font-size:200%;
+
+}
+#border{
+  position: absolute;
+  border-style: solid;
+  border-color: rgb(69, 210, 62);
+  border-radius: 4.5em;
+  width: 20%;
+  border-width: thick;
+  background-color: rgb(69, 210, 62);
+  opacity: 0.8;
+  box-shadow: 10px 10px 5px rgb(36, 22, 16);
+  left: 75%;
+  top: 5%;
+  height: 15%;
+}
+
 
 }
