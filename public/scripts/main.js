@@ -50,8 +50,10 @@ const fields = [
   {index: 39, info: "Boardwalk", color: "#2020CC", owner: "no one", src:""},
 ];
 
+
 socket.on("playerInfoUpdate", (playerData)=>{
-  let money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
+  window.money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
+  console.log(money);
   let property = JSON.parse(playerData).socketProperty; //has to be in the player information, top left corner, REACT
   //let cards = JSON.parse(playerData.socketCards); //array, length = 2, boolean values, cards[0]= (true if player has a jail card) cards[1]= (true if player doesnt have to pay rent for the next house he moves to)
   renderMoney();
@@ -60,6 +62,7 @@ socket.on("diceResults", (dice1, dice2)=>{
   //dice animation
 });
 socket.on("getTheCard", (text)=>{
+  console.log(text);
   showCard(text);
 });
 
@@ -71,6 +74,7 @@ window.onload = ()=>{
     for (let i=0; i<mapData.length; i++){
       playerPositionUpdate(ctx, mapData[i], playerImgs[i]);
     }
+
   });
   socket.on("whoseTurn", (n)=>{
     whoseTurn(n+1);
@@ -91,4 +95,5 @@ window.onload = ()=>{
   socket.on("buyMe?", (n)=>{
     console.log("do you want to buy this street?");
   });
+  renderDropDown();
 }

@@ -1,12 +1,24 @@
 const React = require("react");
 const ReactDOM = require("react-dom");
 
-class Hello extends React.Component {
+class Money  extends React.Component {
+  constructor (){
+    super();
+    this.money;
+  }
   render() {
-    return <h1>Hello</h1>
+    this.money = money;
+    return (
+
+      <div>
+        {this.money}
+        <label> $$$ </label>
+      </div>)
+
+
   }
 }
 
 window.renderMoney = ()=>{
-  ReactDOM.render(<Hello/>, document.getElementById('react'));
+  ReactDOM.render(<Money/>, document.getElementById('moneyDiv'));
 }
