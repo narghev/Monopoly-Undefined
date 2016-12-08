@@ -1,5 +1,6 @@
 const React = require("react");
 const ReactDOM = require("react-dom");
+const mddcanvas = document.getElementById("mainDropDownCanvas").getContext('2d');
 
 class Money extends React.Component {
   constructor (){
@@ -30,16 +31,25 @@ class MainDropDown extends React.Component {
         {
           backgroundColor: fields[i].color
         }
-      } onClick={
-          ()=>{}
       }>
         {fields[i].info}
       </option>);
     }
   }
+  onChange(){
+    mddcanvas.clearRect(0,0,mddcanvas.width, mddcanvas.height);
+    const selectedField = document.getElementById("mainDropDown").childNodes[0].selectedIndex;
+    const fieldImg = new Image();
+    fieldImg.src = "../imgs/cards/"+selectedField+".PNG";
+    fieldImg.onload = ()=>{
+      mddcanvas.drawImage(fieldImg, 0,0,
+        document.getElementById("mainDropDownCanvas").width,
+        document.getElementById("mainDropDownCanvas").height);
+      };
+  }
   render(){
     return(
-      <select>
+      <select onChange={this.onChange}>
         {this.content}
       </select>
     )
