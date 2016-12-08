@@ -60,6 +60,6 @@ canvas{
   top: 5%;
   height: 15%;
 }
-
-
+#mainDropDown{
+  position: absolute;
 }
