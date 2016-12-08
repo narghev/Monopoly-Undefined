@@ -62,4 +62,6 @@ canvas{
 }
 #mainDropDown{
   position: absolute;
+  top: 97%;
+  left: 80%;
 }
