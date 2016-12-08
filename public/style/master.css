@@ -16,11 +16,12 @@ canvas{
 }
 #diceBtn{
   position: absolute;
-  top: 50px;
+  top: 10%;
   -webkit-filter: grayscale(70%) blur(2px);
   filter: grayscale(70%) blur(2px);
   -webkit-transition: filter 0.32s ease-in-out;
   transition: filter 0.32s ease-in-out
+
 }
 #diceBtn img{
   position: absolute;
@@ -34,4 +35,12 @@ canvas{
 #diceBtn:hover{
   -webkit-filter: grayscale(10%);
   filter: grayscale(10%);
+}
+#moneyDiv{
+  position: absolute;
+  left: 70%;
+  top: 15%;
+  font-size: 200%;
+  color: #317823;
+
 }
