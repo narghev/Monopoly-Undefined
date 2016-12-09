@@ -36,17 +36,20 @@ class MainDropDown extends React.Component {
       </option>);
     }
   }
+
   onChange(){
-    mddcanvas.clearRect(0,0,mddcanvas.width, mddcanvas.height);
+    mddcanvas.clearRect(0, 0,mddcanvas.width, mddcanvas.height);
     const selectedField = document.getElementById("mainDropDown").childNodes[0].selectedIndex;
     const fieldImg = new Image();
     fieldImg.src = "../imgs/cards/"+selectedField+".PNG";
     fieldImg.onload = ()=>{
-      mddcanvas.drawImage(fieldImg, 0,0,
-        document.getElementById("mainDropDownCanvas").width,
-        document.getElementById("mainDropDownCanvas").height);
+      mddcanvas.drawImage(fieldImg, 0,  0 ,
+        document.getElementById("mainDropDownCanvas").width ,
+        document.getElementById("mainDropDownCanvas").height );
       };
-  }
+
+    }
+
   render(){
     return(
       <select onChange={this.onChange}>
