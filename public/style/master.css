@@ -44,3 +44,15 @@ canvas{
   color: #317823;
 
 }
+#mainDropDown{
+  position:absolute;
+  top: 85%;
+  left: 70%;
+}
+#mainDropDownCanvas{
+  position: absolute;
+  display: inline;
+  top: 30%;
+  left: 40%;
+
+}
