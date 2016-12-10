@@ -6,7 +6,7 @@ change the directory to the project root directory (where you can see server.js)
 
 $npm install
 
-$npm run app
+$npm run build
 
 $node server.js
 
