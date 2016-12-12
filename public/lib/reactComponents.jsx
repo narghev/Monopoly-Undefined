@@ -38,6 +38,7 @@ class MainDropDown extends React.Component {
   }
 
   onChange(){
+    document.getElementById("blackContainer").appendChild(blackDiv);
     mddcanvas.clearRect(0, 0,mddcanvas.width, mddcanvas.height);
     const selectedField = document.getElementById("mainDropDown").childNodes[0].selectedIndex;
     const fieldImg = new Image();

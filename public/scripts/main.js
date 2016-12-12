@@ -1,5 +1,8 @@
 'use strict'
 
+const blackDiv = document.createElement("DIV");
+blackDiv.setAttribute("class", "black-div");
+
 const socket = io();
 const playerImgs = [new Image(), new Image(), new Image(), new Image()];
 playerImgs[0].src = "imgs/figures/fig0.png";
@@ -10,7 +13,6 @@ renderMainDropDown();
 
 socket.on("playerInfoUpdate", (playerData)=>{
   window.money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
-  console.log(money);
   let property = JSON.parse(playerData).socketProperty; //has to be in the player information, top left corner, REACT
   //let cards = JSON.parse(playerData.socketCards); //array, length = 2, boolean values, cards[0]= (true if player has a jail card) cards[1]= (true if player doesnt have to pay rent for the next house he moves to)
   renderMoney();
