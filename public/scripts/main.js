@@ -54,4 +54,7 @@ window.onload = ()=>{
   socket.on("buyMe?", (n)=>{
     console.log("do you want to buy this street?");
   });
+  socket.on("cantAfford", ()=>{
+    console.log("you cant afford buying this street");
+  });
 }
