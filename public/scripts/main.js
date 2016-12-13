@@ -22,7 +22,8 @@ socket.on("diceResults", (dice1, dice2)=>{
 });
 socket.on("getTheCard", (text)=>{
   console.log(text);
-  showCard(text);
+  window.cardText = text;
+  showCard();
 });
 
 window.onload = ()=>{

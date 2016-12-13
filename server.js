@@ -22,6 +22,7 @@ class Player {
     this.inJail = false;
     this.noRentCard = false;
     this.freeFromJailCard = false;
+    this.trainStationsOwned=0;
   }
   move(fields){
     this.previousField = this.currentField;
@@ -141,6 +142,9 @@ class TrainStation {
     this.owner = null;
     this.price = 200;
   }
+  buyMe(player){
+    io.to(player.socketId).emit("buyMe?", this.index);
+  }
 
   /*
     Charge 25 if one owned,
@@ -161,6 +165,9 @@ class Water {
     this.owner = null;
     this.price = 150;
   }
+  buyMe(player){
+    io.to(player.socketId).emit("buyMe?", this.index);
+  }
 
   /*
     Charge 4 times roll of dice is one is owned,
@@ -174,6 +181,9 @@ class Electricity {
   constructor(){
     this.owner = null;
     this.price = 150;
+  }
+  buyMe(player){
+    io.to(player.socketId).emit("buyMe?", this.index);
   }
 
   /*
@@ -453,7 +463,7 @@ io.on('connection', (socket)=>{
           socket.on("buyMe?yes", ()=>{
             if (players[sender].money>=map[players[sender].currentField].fieldData.price){
               clearTimeout(buyMeAnswerTimeout);
-              console.log("player"+turn + " baught street #"+players[sender].currentField);
+              console.log("player"+turn + " bought street #"+players[sender].currentField);
               players[sender].money -= map[players[sender].currentField].fieldData.price;
               players[sender].property.push({streetNo: players[sender].currentField, houses: map[players[sender].currentField].houseN, hotels: map[players[sender].currentField].hotelN});
               map[players[sender].currentField].fieldData.owner = players[sender];
@@ -513,7 +523,7 @@ io.on('connection', (socket)=>{
           socket.on("buyMe?yes", ()=>{
             if (players[sender].money>=map[players[sender].currentField].fieldData.price){
               clearTimeout(buyMeAnswerTimeout);
-              console.log("player"+turn + " baught street #"+players[sender].currentField);
+              console.log("player"+turn + " bought street #"+players[sender].currentField);
               players[sender].money -= map[players[sender].currentField].fieldData.price;
               players[sender].property.push(players[sender].currentField);
               map[players[sender].currentField].fieldData.owner = players[sender];
@@ -565,7 +575,7 @@ io.on('connection', (socket)=>{
           socket.on("buyMe?yes", ()=>{
             if (players[sender].money>=map[players[sender].currentField].fieldData.price){
               clearTimeout(buyMeAnswerTimeout);
-              console.log("player"+turn + " baught street #"+players[sender].currentField);
+              console.log("player"+turn + " bought street #"+players[sender].currentField);
               players[sender].money -= map[players[sender].currentField].fieldData.price;
               players[sender].property.push(players[sender].currentField);
               map[players[sender].currentField].fieldData.owner = players[sender];

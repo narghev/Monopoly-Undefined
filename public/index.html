@@ -13,8 +13,9 @@
       <img src="imgs/dice1.png" />
       <img src="imgs/dice2.png" />
     </div>
-    <div id="blackContainer"></div>
+    <div id="blackContainer" style="position: absolute;"></div>
     <div id="moneyDiv"></div>
+    <div id="cardDiv" onclick="document.getElementById('blackContainer').removeChild(document.getElementById('blackContainer').childNodes[0])"></div>
     <div id="mainDropDown"></div>
     <script src="scripts/map.js"></script>
     <script src="scripts/reactComponents.js"></script>

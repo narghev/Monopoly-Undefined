@@ -63,3 +63,23 @@ class MainDropDown extends React.Component {
 window.renderMainDropDown = ()=>{
   ReactDOM.render(<MainDropDown/>, document.getElementById('mainDropDown'));
 }
+
+class Card extends React.Component {
+  constructor (){
+    super();
+    this.text;
+  }
+  render() {
+    this.text = cardText;
+    return (
+      <div>
+        {this.text}
+      </div>
+    )
+  }
+}
+
+window.showCard = ()=>{
+  ReactDOM.render(<Card/>, document.getElementById('cardDiv'));
+  document.getElementById("blackContainer").appendChild(blackDiv);
+}
