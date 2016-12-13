@@ -41,10 +41,18 @@ canvas{
 #moneyDiv{
   position: absolute;
   left: 70%;
-  top: 15%;
-  font-size: 200%;
-  color: #317823;
-
+  font-size: 40px;
+  color: #841b1b;
+  border-style: solid;
+  border-width: thick;
+  background-color: rgba(206, 161, 43, 0.62);
+  border-spacing: 1000px 600px;
+  border-collapse: separate;
+  padding: 30px 50px 30px 50px;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+  border-top: none;
+  font-weight: bold;
 }
 #mainDropDown{
   position:absolute;
