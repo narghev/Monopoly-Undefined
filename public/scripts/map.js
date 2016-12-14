@@ -40,3 +40,6 @@ window.fields = [
   {index: 38, info: "Luxury Tax", color: "#808080", owner: null, src:null},
   {index: 39, info: "Boardwalk", color: "#2020CC", owner: "no one", src:""},
 ];
+for (let i=0; i<fields.length; i++){
+  fields[i].src="./imgs/cards/"+i+".PNG";
+}

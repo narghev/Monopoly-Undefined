@@ -364,6 +364,7 @@ const gameStart = ()=>{
   setTimeout(()=>{
     for (let i=0; i<players.length;i++){
       updatePlayerInfo(players[i]);
+      io.to(players[i].socketId).emit("knowYourself", players[i].id);
     }
     updateMapInfoPlayerPos();
     io.sockets.emit("gameStarted");

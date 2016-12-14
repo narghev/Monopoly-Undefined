@@ -135,6 +135,7 @@ class Box extends React.Component{
   }
   render(){
     this.time();
+    this.src = fields[mapData[myN]].src;
     const fieldImg = new Image();
     return(
       <div style = {this.style}>
@@ -149,4 +150,16 @@ class Box extends React.Component{
 window.askPlayer = ()=>{
   document.getElementById("blackContainer").appendChild(blackDiv);
   ReactDOM.render(<Box />, document.getElementById("buyMe?box"));
+}
+
+class MyPic extends React.Component {
+  render() {
+    return (
+      <img src={"imgs/figures/fig"+myN+".png"} />
+    )
+  }
+}
+
+window.renderMyPic = ()=>{
+  ReactDOM.render(<MyPic/>, document.getElementById('myPicDiv'));
 }

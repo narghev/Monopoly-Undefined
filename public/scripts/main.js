@@ -30,7 +30,7 @@ window.onload = ()=>{
   document.getElementById("diceBtn").setAttribute("style", "left: "+(100+canvas.width)+"px;");
   socket.on("mapInfoPlayerPos", (mapData)=>{
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    console.log(mapData);
+    window.mapData = mapData;
     for (let i=0; i<mapData.length; i++){
       playerPositionUpdate(ctx, mapData[i], playerImgs[i]);
     }
@@ -61,5 +61,9 @@ window.onload = ()=>{
   });
   socket.on("fieldAction", ()=>{
     socket.emit("fieldActionReady");
+  });
+  socket.on("knowYourself", (n)=>{
+    window.myN = n;
+    renderMyPic();
   });
 }
