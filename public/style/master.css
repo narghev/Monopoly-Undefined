@@ -66,6 +66,7 @@ canvas{
   left: 40%;
   width: 285px;
   height: 350px;
+  z-index: 1;
 }
 .black-div{
   width: 100vw;

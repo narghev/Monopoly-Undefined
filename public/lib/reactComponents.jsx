@@ -92,3 +92,61 @@ window.showCard = ()=>{
   document.getElementById("blackContainer").appendChild(blackDiv);
   ReactDOM.render(<Card/>, document.getElementById('cardDiv'));
 }
+
+class Box extends React.Component{
+  constructor(){
+    super();
+    this.style={
+      position: "absolute",
+      backgroundColor: '#f4d610',
+      top: "30vh",
+      left: '35vw',
+      zIndex: "2",
+      width: "30vw",
+      height: "50vh",
+      border: 'solid',
+      borderRadius: '1em',
+      borderColor: '#594321',
+      opacity: "0.9"
+    },
+    this.t;
+    this.style.p1={
+      textAlign: "center",
+      fontSize: "24px"
+    }
+    this.src;
+  }
+  time(){
+    this.t = setTimeout(()=>{
+      this.no();
+    },7500)
+  }
+  yes(){
+    clearTimeout(Box.t);
+    socket.emit("buyMe?yes");
+    document.getElementById('blackContainer').removeChild(document.getElementById('blackContainer').childNodes[0]);
+    document.getElementById('buyMe?box').removeChild(document.getElementById('buyMe?box').childNodes[0]);
+  }
+  no(){
+    clearTimeout(Box.t);
+    socket.emit("buyMe?no");
+    document.getElementById('blackContainer').removeChild(document.getElementById('blackContainer').childNodes[0]);
+    document.getElementById('buyMe?box').removeChild(document.getElementById('buyMe?box').childNodes[0]);
+  }
+  render(){
+    this.time();
+    const fieldImg = new Image();
+    return(
+      <div style = {this.style}>
+        <p style = {this.style.p1}>Do you want to buy this street?</p>
+        <img width={"50%"} height={"75%"} src={this.src} style = {{position:"absolute", right: "25%"}} />
+        <img onClick={this.no}  src={"../imgs/no.png"} width={"75px"} height={"75px"} style={{position: 'absolute', left: '15px', bottom: '15px'}}/>
+        <img onClick={this.yes} src={"../imgs/yes.png"} width={"75px"} height={"75px"} style={{position: 'absolute', right: '15px', bottom: '15px'}}/>
+      </div>
+    )
+  }
+}
+window.askPlayer = ()=>{
+  document.getElementById("blackContainer").appendChild(blackDiv);
+  ReactDOM.render(<Box />, document.getElementById("buyMe?box"));
+}
