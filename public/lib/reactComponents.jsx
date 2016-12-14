@@ -48,7 +48,6 @@ class MainDropDown extends React.Component {
         document.getElementById("mainDropDownCanvas").width ,
         document.getElementById("mainDropDownCanvas").height );
       };
-
     }
 
   render(){
@@ -164,11 +163,38 @@ window.renderMyPic = ()=>{
   ReactDOM.render(<MyPic/>, document.getElementById('myPicDiv'));
 }
 
+class PropertyInfo extends React.Component {
+  constructor(){
+    super();
+    this.houseN;
+    this.hotelN;
+    this.src;
+  }
+  render(){
+    this.houseN = property[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].houses;
+    this.hotelN = property[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].hotels;
+    this.src = fields[property[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].streetNo].src;
+    return(
+      <div>
+        <img src="../imgs/house.png" style={{width: "75px", height: "75px"}}/>
+        <p>{this.houseN}</p>
+        <img src="../imgs/hotel.png" style={{width: "75px", height: "75px"}}/>
+        <p>{this.houseN}</p>
+        <img src="../imgs/addHouse.png" style={{width: "50px", height: "50px"}}/>
+      </div>
+    )
+  }
+}
+
 class PropertyDropDown extends React.Component {
   constructor(){
     super();
     this.content = [];
   }
+  onChange(){
+    const selectedField = document.getElementById("propertyDropDown").childNodes[0].selectedIndex;
+    ReactDOM.render(<PropertyInfo/>, document.getElementById('propertyInfo'));
+    }
   render() {
     for(let i=0; i<property.length; i++){
       this.content.push(<option key={fields[property[i].streetNo].index} style={
@@ -182,7 +208,7 @@ class PropertyDropDown extends React.Component {
       </option>);
     }
     return(
-      <select>
+      <select onChange={this.onChange}>
         {this.content}
       </select>
     )

@@ -50,7 +50,7 @@ class RegularStreet {
   constructor(price, rent, group, index){
     this.owner = null;
     this.price = price;
-    this.hotel = false;
+    this.hotel = 0;
     this.houses = 0;
     this.rent = rent;
     this.group = group;
@@ -474,7 +474,7 @@ io.on('connection', (socket)=>{
             clearTimeout(buyMeAnswerTimeout);
             console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
             players[sender].money -= map[players[sender].currentField].fieldData.price;
-            players[sender].property.push({streetNo: players[sender].currentField, houses: map[players[sender].currentField].houseN, hotels: map[players[sender].currentField].hotelN});
+            players[sender].property.push({streetNo: players[sender].currentField, houses: map[players[sender].currentField].fieldData.houses, hotels: map[players[sender].currentField].fieldData.hotel});
             map[players[sender].currentField].fieldData.owner = players[sender];
             yourTurn(players[turn]);
             updatePlayerInfo(players[sender]);

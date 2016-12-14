@@ -15,7 +15,6 @@ socket.on("playerInfoUpdate", (playerData)=>{
   window.money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
   window.property = JSON.parse(playerData).socketProperty; //has to be in the player information, top left corner, REACT
   //let cards = JSON.parse(playerData.socketCards); //array, length = 2, boolean values, cards[0]= (true if player has a jail card) cards[1]= (true if player doesnt have to pay rent for the next house he moves to)
-  console.log(property[0],property[1]);
   renderMoney();
   renderPropertyDropDown();
 });
@@ -23,7 +22,6 @@ socket.on("diceResults", (dice1, dice2)=>{
   //dice animation
 });
 socket.on("getTheCard", (text)=>{
-  console.log(text);
   window.cardText = text;
   showCard();
 });
@@ -42,7 +40,6 @@ window.onload = ()=>{
     whoseTurn(n+1);
   });
   socket.on("gameStarted", ()=>{
-    console.log("started");
     document.getElementById("diceBtn").setAttribute("onclick", "socket.emit('moveTheFigure')");
   });
   socket.on("itsYourTurn", ()=>{
@@ -52,14 +49,11 @@ window.onload = ()=>{
     notYourTurnAnimation(n);
   });
   socket.on("imprisoned", (n)=>{
-    console.log("player"+n+" got imprisoned.");
   });
   socket.on("buyMe?", (n)=>{
-    console.log("do you want to buy this street?");
     askPlayer();
   });
   socket.on("cantAfford", ()=>{
-    console.log("you cant afford buying this street");
   });
   socket.on("fieldAction", ()=>{
     socket.emit("fieldActionReady");
