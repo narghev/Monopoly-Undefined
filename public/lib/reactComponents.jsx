@@ -163,3 +163,32 @@ class MyPic extends React.Component {
 window.renderMyPic = ()=>{
   ReactDOM.render(<MyPic/>, document.getElementById('myPicDiv'));
 }
+
+class PropertyDropDown extends React.Component {
+  constructor(){
+    super();
+    this.content = [];
+  }
+  render() {
+    for(let i=0; i<property.length; i++){
+      this.content.push(<option key={fields[property[i].streetNo].index} style={
+        {
+          backgroundColor: fields[property[i].streetNo].color
+        }
+      }>
+        {fields[property[i].streetNo].index}
+        {". "}
+        {fields[property[i].streetNo].info}
+      </option>);
+    }
+    return(
+      <select>
+        {this.content}
+      </select>
+    )
+  }
+}
+
+window.renderPropertyDropDown = ()=>{
+  ReactDOM.render(<PropertyDropDown/>, document.getElementById('propertyDropDown'));
+}

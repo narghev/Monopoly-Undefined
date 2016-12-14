@@ -527,7 +527,7 @@ io.on('connection', (socket)=>{
             clearTimeout(buyMeAnswerTimeout);
             console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
             players[sender].money -= map[players[sender].currentField].fieldData.price;
-            players[sender].property.push(players[sender].currentField);
+            players[sender].property.push({streetNo: players[sender].currentField});
             map[players[sender].currentField].fieldData.owner = players[sender];
             yourTurn(players[turn]);
             updatePlayerInfo(players[sender]);
@@ -573,7 +573,7 @@ io.on('connection', (socket)=>{
             clearTimeout(buyMeAnswerTimeout);
             console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
             players[sender].money -= map[players[sender].currentField].fieldData.price;
-            players[sender].property.push(players[sender].currentField);
+            players[sender].property.push({streetNo: players[sender].currentField});
             map[players[sender].currentField].fieldData.owner = players[sender];
             yourTurn(players[turn]);
             updatePlayerInfo(players[sender]);
@@ -607,7 +607,7 @@ io.on('connection', (socket)=>{
             clearTimeout(buyMeAnswerTimeout);
             console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
             players[sender].money -= map[players[sender].currentField].fieldData.price;
-            players[sender].property.push(players[sender].currentField);
+            players[sender].property.push({streetNo: players[sender].currentField});
             map[players[sender].currentField].fieldData.owner = players[sender];
             map[players[sender].currentField].fieldData.owner.trainStationsOwned++;
             yourTurn(players[turn]);
