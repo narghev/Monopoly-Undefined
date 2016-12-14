@@ -590,9 +590,43 @@ io.on('connection', (socket)=>{
         });
       }
     }
+    else if (map[players[sender].currentField].type===3){//trainStation
+      if (map[players[sender].currentField].fieldData.owner!=null){
+        players[sender].money -= 25*(2^map[players[sender].currentField].fieldData.owner.trainStationsOwned);
+        map[players[sender].currentField].fieldData.owner.money += 25*(2^map[players[sender].currentField].fieldData.owner.trainStationsOwned);
+      }
+      else if (map[players[sender].currentField].fieldData.owner===null){
+        map[players[sender].currentField].fieldData.buyMe(players[sender]);
+        let buyMeAnswerTimeout = setTimeout(()=>{
+          yourTurn(players[turn]);
+          console.log("Player"+(turn-1)+" failed to play in time. Now it's player"+(turn)+"'s turn.");
+        },15000);
+        socket.on("buyMe?yes", ()=>{
+          if (players[sender].money>=map[players[sender].currentField].fieldData.price){
+            clearTimeout(buyMeAnswerTimeout);
+            console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
+            players[sender].money -= map[players[sender].currentField].fieldData.price;
+            players[sender].property.push(players[sender].currentField);
+            map[players[sender].currentField].fieldData.owner = players[sender];
+            map[players[sender].currentField].fieldData.owner.trainStationsOwned++;
+            yourTurn(players[turn]);
+            updatePlayerInfo(players[sender]);
+          }
+          else{
+            clearTimeout(buyMeAnswerTimeout);
+            io.to(players[sender].socketId).emit("cantAfford");
+            yourTurn(players[turn]);
+          }
+        });
+        socket.on("buyMe?no", ()=>{
+          clearTimeout(buyMeAnswerTimeout);
+          console.log("player"+(turn-1)+ " did not buy street #"+players[sender].currentField);
+          yourTurn(players[turn]);
+        });
+      }
+    }
     else {
       yourTurn(players[turn]);
     }
-
   });
 });
