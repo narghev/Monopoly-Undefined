@@ -68,11 +68,20 @@ class Card extends React.Component {
   constructor (){
     super();
     this.text;
+    this.style = {
+      color: "#CA2020",
+      textAlign: "center",
+      fontSize: "50px",
+      fontWeight: "bold",
+      backgroundColor: "#C3C348",
+      zIndex: "1",
+      width: "100%"
+    }
   }
   render() {
     this.text = cardText;
     return (
-      <div>
+      <div style={this.style}>
         {this.text}
       </div>
     )
@@ -80,6 +89,6 @@ class Card extends React.Component {
 }
 
 window.showCard = ()=>{
-  ReactDOM.render(<Card/>, document.getElementById('cardDiv'));
   document.getElementById("blackContainer").appendChild(blackDiv);
+  ReactDOM.render(<Card/>, document.getElementById('cardDiv'));
 }

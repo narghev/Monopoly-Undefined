@@ -9,13 +9,13 @@
     <canvas id="canvas" width="700" height="700"></canvas>
     <canvas id="canvasHelper" width="710" height="710"></canvas>
     <canvas id="mainDropDownCanvas" width="285px" height="350px" onclick="this.getContext('2d').clearRect(0,0,this.width,this.height);document.getElementById('blackContainer').removeChild(document.getElementById('blackContainer').childNodes[0])"></canvas>
-    <div alt="Click to toss the dice." id="diceBtn">
+    <div alt="Click to roll the dice." id="diceBtn">
       <img src="imgs/dice1.png" />
       <img src="imgs/dice2.png" />
     </div>
-    <div id="blackContainer" style="position: absolute;"></div>
+    <div id="blackContainer" style="position: absolute;" onclick="this.removeChild(this.childNodes[0]);document.getElementById('cardDiv').removeChild(document.getElementById('cardDiv').childNodes[0]);"></div>
     <div id="moneyDiv"></div>
-    <div id="cardDiv" onclick="document.getElementById('blackContainer').removeChild(document.getElementById('blackContainer').childNodes[0])"></div>
+    <div id="cardDiv"></div>
     <div id="mainDropDown"></div>
     <script src="scripts/map.js"></script>
     <script src="scripts/reactComponents.js"></script>

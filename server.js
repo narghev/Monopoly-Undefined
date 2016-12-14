@@ -23,6 +23,7 @@ class Player {
     this.noRentCard = false;
     this.freeFromJailCard = false;
     this.trainStationsOwned=0;
+    this.turnPermission = false;
   }
   move(fields){
     this.previousField = this.currentField;
@@ -358,6 +359,7 @@ const updateMapInfoPlayerPos = ()=>{
 const gameStart = ()=>{
   console.log("4 players are ready, the games has started.");
   console.log("It's player0's turn.");
+  players[0].turnPermission = true;
   yourTurn(players[turn]);
   setTimeout(()=>{
     for (let i=0; i<players.length;i++){
@@ -387,7 +389,9 @@ const yourTurn = (player)=>{
     if (i.id!=player.id){
       io.to(i.socketId).emit("whoseTurn", turn);
     }
+    i.turnPermission=false;
   }
+  player.turnPermission = true;
   turnTime = setTimeout(()=>{
     console.log("Player"+(turn)+" failed to play in time. Now it's player"+(turn+1)+"'s turn.");
     turn=(turn+1)%4;
@@ -413,198 +417,182 @@ io.on('connection', (socket)=>{
 
   socket.on('moveTheFigure', ()=>{
     const sender = who(socket.id);
-    if (sender===turn)
+    if (players[sender].turnPermission && turn===sender)
     {
       clearTimeout(turnTime);
       console.log("player"+turn+" moved.");
-
       let dice1 = trowDice();
       let dice2 = trowDice();
       io.sockets.emit("diceResults", dice1, dice2);
       players[sender].move(dice1+dice2);
       updateMapInfoPlayerPos();
-      if (map[players[sender].currentField].type===4){//chance
-        chance.show(players[sender]);
-        turn=(turn+1)%4;
-        yourTurn(players[turn]);
-      }
-      else if (map[players[sender].currentField].type===1){//chest
-        chest.show(players[sender]);
-        turn=(turn+1)%4;
-        yourTurn(players[turn]);
-      }
-      else if (map[players[sender].currentField].type===2){//incomeTax
-        players[sender].money = players[sender].money - ((200 < (players[sender].money*0.1) ? 200 : (players[sender].money*0.1)));
-        updatePlayerInfo(players[sender]);
-        turn=(turn+1)%4;
-        yourTurn(players[turn]);
-      }
-      else if (map[players[sender].currentField].type===10){//goToJail
-        players[sender].inJail = true;
-        players[sender].currentField = 10;
-        map[10].fieldData.currentPrisoners.push(players[sender]);
-        io.sockets.emit("imprisoned", (turn+1));
-        updateMapInfoPlayerPos()
-        turn=(turn+1)%4;
-        yourTurn(players[turn]);;
-      }
-      else if (map[players[sender].currentField].type===11){//lux tax
-          players[sender].money-=100;
-          updatePlayerInfo(players[sender]);
-      }
-      else if (map[players[sender].currentField].type===0){//street
-        if (map[players[sender].currentField].fieldData.owner===null){
-          map[players[sender].currentField].fieldData.buyMe(players[sender]);
-          let buyMeAnswerTimeout = setTimeout(()=>{
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-            console.log("Player"+(turn)+" failed to play in time. Now it's player"+(turn+1)+"'s turn.");
-          },15000);
-          socket.on("buyMe?yes", ()=>{
-            if (players[sender].money>=map[players[sender].currentField].fieldData.price){
-              clearTimeout(buyMeAnswerTimeout);
-              console.log("player"+turn + " bought street #"+players[sender].currentField);
-              players[sender].money -= map[players[sender].currentField].fieldData.price;
-              players[sender].property.push({streetNo: players[sender].currentField, houses: map[players[sender].currentField].houseN, hotels: map[players[sender].currentField].hotelN});
-              map[players[sender].currentField].fieldData.owner = players[sender];
-              turn=(turn+1)%4;
-              yourTurn(players[turn]);
-              updatePlayerInfo(players[sender]);
-            }
-            else{
-              clearTimeout(buyMeAnswerTimeout);
-              io.to(players[sender].socketId).emit("cantAfford");
-              turn=(turn+1)%4;
-              yourTurn(players[turn]);
-            }
-          });
-          socket.on("buyMe?no", ()=>{
-            clearTimeout(buyMeAnswerTimeout);
-            console.log("player"+turn + " did not buy street #"+players[sender].currentField);
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-          });
-        }
-        else if (map[players[sender].currentField].fieldData.owner!=null){
-          players[sender].money -= map[players[sender].currentField].fieldData.rent;
-          map[players[sender].currentField].fieldData.owner.money += map[players[sender].currentField].fieldData.rent;
-          updatePlayerInfo(players[sender]);
-          updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
-          turn=(turn+1)%4;
-          yourTurn(players[turn]);
-        }
-      }
-      else if (map[players[sender].currentField].type===6){//Electricity
-        if (map[players[sender].currentField].fieldData.owner!=null){
-          if (utilitiesArr[0].owner!=utilitiesArr[1].owner){
-            players[sender].money -= 4*players[sender].currentField-players[sender].previousField;
-            map[players[sender].currentField].fieldData.owner.money += 4*players[sender].currentField-players[sender].previousField;
-            updatePlayerInfo(players[sender]);
-            updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-          }
-          else if (utilitiesArr[0].owner===utilitiesArr[1].owner){
-            players[sender].money -= 10*players[sender].currentField-players[sender].previousField;
-            map[players[sender].currentField].fieldData.owner.money += 10*players[sender].currentField-players[sender].previousField;
-            updatePlayerInfo(players[sender]);
-            updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-          }
-        }
-        else if (map[players[sender].currentField].fieldData.owner===null){
-          map[players[sender].currentField].fieldData.buyMe(players[sender]);
-          let buyMeAnswerTimeout = setTimeout(()=>{
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-            console.log("Player"+(turn)+" failed to play in time. Now it's player"+(turn+1)+"'s turn.");
-          },15000);
-          socket.on("buyMe?yes", ()=>{
-            if (players[sender].money>=map[players[sender].currentField].fieldData.price){
-              clearTimeout(buyMeAnswerTimeout);
-              console.log("player"+turn + " bought street #"+players[sender].currentField);
-              players[sender].money -= map[players[sender].currentField].fieldData.price;
-              players[sender].property.push(players[sender].currentField);
-              map[players[sender].currentField].fieldData.owner = players[sender];
-              turn=(turn+1)%4;
-              yourTurn(players[turn]);
-              updatePlayerInfo(players[sender]);
-            }
-            else{
-              clearTimeout(buyMeAnswerTimeout);
-              io.to(players[sender].socketId).emit("cantAfford");
-              turn=(turn+1)%4;
-              yourTurn(players[turn]);
-            }
-          });
-          socket.on("buyMe?no", ()=>{
-            clearTimeout(buyMeAnswerTimeout);
-            console.log("player"+turn + " did not buy street #"+players[sender].currentField);
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-          });
-        }
-      }
-      else if (map[players[sender].currentField].type===9){//Water works
-        if (map[players[sender].currentField].fieldData.owner!=null){
-          if (utilitiesArr[0].owner!=utilitiesArr[1].owner){
-            players[sender].money -= 4*players[sender].currentField-players[sender].previousField;
-            map[players[sender].currentField].fieldData.owner.money += 4*players[sender].currentField-players[sender].previousField;
-            updatePlayerInfo(players[sender]);
-            updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-          }
-          else if (utilitiesArr[0].owner===utilitiesArr[1].owner){
-            players[sender].money -= 10*players[sender].currentField-players[sender].previousField;
-            map[players[sender].currentField].fieldData.owner.money += 10*players[sender].currentField-players[sender].previousField;
-            updatePlayerInfo(players[sender]);
-            updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-          }
-        }
-        else if (map[players[sender].currentField].fieldData.owner===null){
-          map[players[sender].currentField].fieldData.buyMe(players[sender]);
-          let buyMeAnswerTimeout = setTimeout(()=>{
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-            console.log("Player"+(turn)+" failed to play in time. Now it's player"+(turn+1)+"'s turn.");
-          },15000);
-          socket.on("buyMe?yes", ()=>{
-            if (players[sender].money>=map[players[sender].currentField].fieldData.price){
-              clearTimeout(buyMeAnswerTimeout);
-              console.log("player"+turn + " bought street #"+players[sender].currentField);
-              players[sender].money -= map[players[sender].currentField].fieldData.price;
-              players[sender].property.push(players[sender].currentField);
-              map[players[sender].currentField].fieldData.owner = players[sender];
-              turn=(turn+1)%4;
-              yourTurn(players[turn]);
-              updatePlayerInfo(players[sender]);
-            }
-            else{
-              clearTimeout(buyMeAnswerTimeout);
-              io.to(players[sender].socketId).emit("cantAfford");
-              turn=(turn+1)%4;
-              yourTurn(players[turn]);
-            }
-          });
-          socket.on("buyMe?no", ()=>{
-            clearTimeout(buyMeAnswerTimeout);
-            console.log("player"+turn + " did not buy street #"+players[sender].currentField);
-            turn=(turn+1)%4;
-            yourTurn(players[turn]);
-          });
-        }
-      }
-      else {
-        turn=(turn+1)%4;
-        yourTurn(players[turn]);
-      }
+      io.to(players[sender].socketId).emit("fieldAction");
     }
     else{
       io.to(players[sender].socketId).emit("notYourTurn", (turn+1));
     }
+  });
+  socket.on("fieldActionReady", ()=>{
+    turn=(turn+1)%4;
+    const sender = who(socket.id);
+
+    if (map[players[sender].currentField].type===4){//chance
+      chance.show(players[sender]);
+      yourTurn(players[turn]);
+    }
+    else if (map[players[sender].currentField].type===1){//chest
+      chest.show(players[sender]);
+      yourTurn(players[turn]);
+    }
+    else if (map[players[sender].currentField].type===2){//incomeTax
+      players[sender].money = players[sender].money - ((200 < (players[sender].money*0.1) ? 200 : (players[sender].money*0.1)));
+      updatePlayerInfo(players[sender]);
+      yourTurn(players[turn]);
+    }
+    else if (map[players[sender].currentField].type===10){//goToJail
+      players[sender].inJail = true;
+      players[sender].currentField = 10;
+      map[10].fieldData.currentPrisoners.push(players[sender]);
+      io.sockets.emit("imprisoned", (turn));
+      updateMapInfoPlayerPos()
+      yourTurn(players[turn]);;
+    }
+    else if (map[players[sender].currentField].type===11){//lux tax
+        players[sender].money-=100;
+        updatePlayerInfo(players[sender]);
+    }
+    else if (map[players[sender].currentField].type===0){//street
+      if (map[players[sender].currentField].fieldData.owner===null){
+        map[players[sender].currentField].fieldData.buyMe(players[sender]);
+        let buyMeAnswerTimeout = setTimeout(()=>{
+          yourTurn(players[turn]);
+          console.log("Player"+(turn-1)+" failed to play in time. Now it's player"+(turn)+"'s turn.");
+        },15000);
+        socket.on("buyMe?yes", ()=>{
+          if (players[sender].money>=map[players[sender].currentField].fieldData.price){
+            clearTimeout(buyMeAnswerTimeout);
+            console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
+            players[sender].money -= map[players[sender].currentField].fieldData.price;
+            players[sender].property.push({streetNo: players[sender].currentField, houses: map[players[sender].currentField].houseN, hotels: map[players[sender].currentField].hotelN});
+            map[players[sender].currentField].fieldData.owner = players[sender];
+            yourTurn(players[turn]);
+            updatePlayerInfo(players[sender]);
+          }
+          else{
+            clearTimeout(buyMeAnswerTimeout);
+            io.to(players[sender].socketId).emit("cantAfford");
+            yourTurn(players[turn]);
+          }
+        });
+        socket.on("buyMe?no", ()=>{
+          clearTimeout(buyMeAnswerTimeout);
+          console.log("player"+(turn-1)+ " did not buy street #"+players[sender].currentField);
+          yourTurn(players[turn]);
+        });
+      }
+      else if (map[players[sender].currentField].fieldData.owner!=null){
+        players[sender].money -= map[players[sender].currentField].fieldData.rent;
+        map[players[sender].currentField].fieldData.owner.money += map[players[sender].currentField].fieldData.rent;
+        updatePlayerInfo(players[sender]);
+        updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
+        yourTurn(players[turn]);
+      }
+    }
+    else if (map[players[sender].currentField].type===6){//Electricity
+      if (map[players[sender].currentField].fieldData.owner!=null){
+        if (utilitiesArr[0].owner!=utilitiesArr[1].owner){
+          players[sender].money -= 4*players[sender].currentField-players[sender].previousField;
+          map[players[sender].currentField].fieldData.owner.money += 4*players[sender].currentField-players[sender].previousField;
+          updatePlayerInfo(players[sender]);
+          updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
+          yourTurn(players[turn]);
+        }
+        else if (utilitiesArr[0].owner===utilitiesArr[1].owner){
+          players[sender].money -= 10*players[sender].currentField-players[sender].previousField;
+          map[players[sender].currentField].fieldData.owner.money += 10*players[sender].currentField-players[sender].previousField;
+          updatePlayerInfo(players[sender]);
+          updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
+          yourTurn(players[turn]);
+        }
+      }
+      else if (map[players[sender].currentField].fieldData.owner===null){
+        map[players[sender].currentField].fieldData.buyMe(players[sender]);
+        let buyMeAnswerTimeout = setTimeout(()=>{
+          yourTurn(players[turn]);
+          console.log("Player"+(turn-1)+" failed to play in time. Now it's player"+(turn)+"'s turn.");
+        },15000);
+        socket.on("buyMe?yes", ()=>{
+          if (players[sender].money>=map[players[sender].currentField].fieldData.price){
+            clearTimeout(buyMeAnswerTimeout);
+            console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
+            players[sender].money -= map[players[sender].currentField].fieldData.price;
+            players[sender].property.push(players[sender].currentField);
+            map[players[sender].currentField].fieldData.owner = players[sender];
+            yourTurn(players[turn]);
+            updatePlayerInfo(players[sender]);
+          }
+          else{
+            clearTimeout(buyMeAnswerTimeout);
+            io.to(players[sender].socketId).emit("cantAfford");
+            yourTurn(players[turn]);
+          }
+        });
+        socket.on("buyMe?no", ()=>{
+          clearTimeout(buyMeAnswerTimeout);
+          console.log("player"+(turn-1)+ " did not buy street #"+players[sender].currentField);
+          yourTurn(players[turn]);
+        });
+      }
+    }
+    else if (map[players[sender].currentField].type===9){//Water works
+      if (map[players[sender].currentField].fieldData.owner!=null){
+        if (utilitiesArr[0].owner!=utilitiesArr[1].owner){
+          players[sender].money -= 4*players[sender].currentField-players[sender].previousField;
+          map[players[sender].currentField].fieldData.owner.money += 4*players[sender].currentField-players[sender].previousField;
+          updatePlayerInfo(players[sender]);
+          updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
+          yourTurn(players[turn]);
+        }
+        else if (utilitiesArr[0].owner===utilitiesArr[1].owner){
+          players[sender].money -= 10*players[sender].currentField-players[sender].previousField;
+          map[players[sender].currentField].fieldData.owner.money += 10*players[sender].currentField-players[sender].previousField;
+          updatePlayerInfo(players[sender]);
+          updatePlayerInfo(map[players[sender].currentField].fieldData.owner);
+          yourTurn(players[turn]);
+        }
+      }
+      else if (map[players[sender].currentField].fieldData.owner===null){
+        map[players[sender].currentField].fieldData.buyMe(players[sender]);
+        let buyMeAnswerTimeout = setTimeout(()=>{
+          yourTurn(players[turn]);
+          console.log("Player"+(turn-1)+" failed to play in time. Now it's player"+(turn)+"'s turn.");
+        },15000);
+        socket.on("buyMe?yes", ()=>{
+          if (players[sender].money>=map[players[sender].currentField].fieldData.price){
+            clearTimeout(buyMeAnswerTimeout);
+            console.log("player"+(turn-1)+ " bought street #"+players[sender].currentField);
+            players[sender].money -= map[players[sender].currentField].fieldData.price;
+            players[sender].property.push(players[sender].currentField);
+            map[players[sender].currentField].fieldData.owner = players[sender];
+            yourTurn(players[turn]);
+            updatePlayerInfo(players[sender]);
+          }
+          else{
+            clearTimeout(buyMeAnswerTimeout);
+            io.to(players[sender].socketId).emit("cantAfford");
+            yourTurn(players[turn]);
+          }
+        });
+        socket.on("buyMe?no", ()=>{
+          clearTimeout(buyMeAnswerTimeout);
+          console.log("player"+(turn-1)+ " did not buy street #"+players[sender].currentField);
+          yourTurn(players[turn]);
+        });
+      }
+    }
+    else {
+      yourTurn(players[turn]);
+    }
+
   });
 });

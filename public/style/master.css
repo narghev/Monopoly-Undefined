@@ -72,3 +72,10 @@ canvas{
   height: 100vh;
   background-color: rgba(0,0,0,0.7);
 }
+#cardDiv{
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+}

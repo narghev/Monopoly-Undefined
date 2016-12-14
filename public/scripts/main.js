@@ -58,4 +58,7 @@ window.onload = ()=>{
   socket.on("cantAfford", ()=>{
     console.log("you cant afford buying this street");
   });
+  socket.on("fieldAction", ()=>{
+    socket.emit("fieldActionReady");
+  });
 }
