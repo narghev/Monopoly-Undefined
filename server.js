@@ -339,7 +339,7 @@ regStrT8Arr[0],
 regStrT8Arr[1]];
 
 const updatePlayerInfo = (player)=>{
-    io.to(player.socketId).emit('playerInfoUpdate', JSON.stringify({socketMoney: player.money, socketProperty: player.property, socketCards: [player.freeFromJailCard, player.noRentCard]}));
+    io.to(player.socketId).emit('playerInfoUpdate', JSON.stringify({socketMoney: player.money, socketProperty: player.property}));
 }
 
 const updateMapInfoPlayerPos = ()=>{
@@ -359,6 +359,27 @@ const gameStart = ()=>{
     updateMapInfoPlayerPos();
     io.sockets.emit("gameStarted");
   },250);
+}
+
+const gameOver = ()=>{
+  let losers = 0;
+  for (let i in players){
+    if (i.money<=0){
+      losers++;
+    }
+  }
+  if (losers===3){
+    return true;
+  }
+  return false;
+}
+
+const winner = ()=>{
+  for (let i in players){
+    if (i.money>0){
+      return i;
+    }
+  }
 }
 
 const who = (id)=>{
@@ -393,8 +414,10 @@ const yourTurn = (player)=>{
 app.get('/', (req, res)=>{
   if (players.length < 4)
     res.sendFile(__dirname + '/public/index.html');
-  else
-    res.end("Sorry, the game is full.");
+  else{
+    app.use(express.static('public/fullGame'));
+    res.sendFile(__dirname + '/public/fullGame/index.html');
+  }
 });
 
 app.use(express.static('public'));
@@ -408,26 +431,52 @@ io.on('connection', (socket)=>{
 
   socket.on('moveTheFigure', ()=>{
     const sender = who(socket.id);
-    if (players[sender].inJail===true){
-      io.to(players[sender].socketId).emit("outOfJail");
-      players[sender].money -= 50;
-      players[sender].inJail = false;
-      updatePlayerInfo(players[sender]);
+    if (gameOver()){
+      io.to(winner().socketId).emit("over");
     }
-    if (players[sender].turnPermission)
-    {
-      clearTimeout(turnTime);
-      console.log("player"+turn+" moved.");
-      let dice1 = trowDice();
-      let dice2 = trowDice();
-      io.sockets.emit("diceResults", dice1, dice2);
-      players[sender].move(dice1+dice2);
-      updateMapInfoPlayerPos();
-      io.to(players[sender].socketId).emit("fieldAction");
-    }
-    else{
+    if (players[sender].money>0){
+      if (players[sender].inJail===true){
+        io.to(players[sender].socketId).emit("outOfJail");
+        players[sender].money -= 50;
+        players[sender].inJail = false;
+        updatePlayerInfo(players[sender]);
+      }
+      if (players[sender].turnPermission)
+      {
+        clearTimeout(turnTime);
+        console.log("player"+turn+" moved.");
+        let dice1 = trowDice();
+        let dice2 = trowDice();
+        io.sockets.emit("diceResults", dice1, dice2);
+        players[sender].move(dice1+dice2);
+        updateMapInfoPlayerPos();
+        io.to(players[sender].socketId).emit("fieldAction");
+      }
+      else{
       io.to(players[sender].socketId).emit("notYourTurn", (turn+1));
     }
+    }
+    else{
+      players[sender].currentField = 20;
+      updateMapInfoPlayerPos();
+      io.to(players[sender].socketId).emit("broke");
+    }
+  });
+  socket.on("addHouse", (n)=>{
+    const sender = who(socket.id);
+    if (players[sender].money>=50){
+      if (map[n].fieldData.houses<=3){
+        players[sender].money-=50;
+        map[n].fieldData.houses++;
+        map[n].fieldData.rent *= 1.5;
+      }
+      if (map[n].fieldData.houses===4 && map[n].fieldData.hotel===0){
+        players[sender].money-=50;
+        map[n].fieldData.hotel++;
+        map[n].fieldData.rent *= 2;
+      }
+    }
+    updatePlayerInfo(players[sender]);
   });
   socket.on("fieldActionReady", ()=>{
     turn=(turn+1)%4;
@@ -451,7 +500,7 @@ io.on('connection', (socket)=>{
       players[sender].currentField = 10;
       map[10].fieldData.currentPrisoners.push(players[sender]);
       io.sockets.emit("imprisoned", (turn));
-      updateMapInfoPlayerPos()
+      updateMapInfoPlayerPos();
       yourTurn(players[turn]);;
     }
     else if (map[players[sender].currentField].type===11){//lux tax
