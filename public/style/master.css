@@ -40,24 +40,19 @@ canvas{
 }
 #moneyDiv{
   position: absolute;
-  left: 70%;
+  left: 70vw;
   font-size: 40px;
+  font-weight: 400;
   color: #841b1b;
-  border-style: solid;
-  border-width: thick;
-  background-color: rgba(206, 161, 43, 0.62);
-  border-spacing: 1000px 600px;
-  border-collapse: separate;
-  padding: 30px 50px 30px 50px;
-  border-bottom-left-radius: 1em;
-  border-bottom-right-radius: 1em;
-  border-top: none;
-  font-weight: bold;
+  z-index: 1;
 }
 #mainDropDown{
-  position:absolute;
-  top: 85%;
-  left: 70%;
+  position: absolute;
+top: 90%;
+left: 0.8%;
+background-color: rgba(206, 161, 43, 0.62);
+border-radius: 1em;
+  max-width: 37%
 }
 #mainDropDownCanvas{
   position: absolute;
@@ -67,6 +62,7 @@ canvas{
   width: 285px;
   height: 350px;
   z-index: 1;
+
 }
 .black-div{
   width: 100vw;
@@ -88,4 +84,40 @@ canvas{
 #myPicDiv img{
   width: 150px;
   height: 150px;
+}
+select{
+  background-color: transparent;
+  color: #841b1b;
+  padding: 16px;
+  font-size: 32px;
+  border: none;
+  cursor: pointer;
+  min-width: 240px;
+  border-style: none;
+  border-color: transparent;
+  font-weight: 400;
+}
+#propertyDropDown  {
+  position: absolute;
+    left: 62vw;
+    top: 0%;
+    background-color: rgba(206, 161, 43, 0.62);
+    border-style: solid;
+    border-width: thick;
+    border-spacing: 1000px 600px;
+    border-collapse: separate;
+    padding: 100px 20px 30px 20px;
+    color: #841b1b;
+    max-width: 20vw;
+    border-top: none;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
+    min-width: 21%;
+    text-align: right
+}
+
+#propertyInfo{
+  position: absolute;
+  top: 0%;
+  left: 82vw;
 }
