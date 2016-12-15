@@ -178,11 +178,11 @@ class PropertyInfo extends React.Component {
     this.src = fields[property[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].streetNo].src;
     return(
       <div>
-        <img src="../imgs/house.png" style={{width: "75px", height: "75px"}}/>
-        <p>{this.houseN}</p>
-        <img src="../imgs/hotel.png" style={{width: "75px", height: "75px"}}/>
-        <p>{this.houseN}</p>
-        <img src="../imgs/addHouse.png" style={{width: "50px", height: "50px"}}/>
+        <img src="../imgs/house.png" style={{width: "75px", height: "75px", position: "absolute", top: "25vh", right: "17vw"}}/>
+        <p style={{position: "absolute",right:" 17.8vw",top: "32vh",fontSize: "30px",fontWeight: "400",color: "#841b1b"}}>{this.houseN}</p>
+        <img src="../imgs/hotel.png" style={{width: "75px", height: "75px", position: "absolute", top: "25vh", right: "7vw"}}/>
+        <p style={{  position: "absolute",right: "7.9vw",top: "32vh",fontSize: "30px",fontWeight: "400",color: "#841b1b"}}>{this.houseN}</p>
+        <img src="../imgs/addHouse.png" style={{width: "50px", height: "50px", position: "absolute", height: "75px", top: "26vh"}}/>
       </div>
     )
   }
