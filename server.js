@@ -20,8 +20,6 @@ class Player {
     this.houseN = 0;
     this.currentField = 0;
     this.inJail = false;
-    this.noRentCard = false;
-    this.freeFromJailCard = false;
     this.trainStationsOwned=0;
     this.turnPermission = false;
   }
@@ -65,10 +63,6 @@ const chanceArr = [{text: "They think they can kick you (Go forward 3 spaces).",
   player.move(3);
   updateMapInfoPlayerPos();
 }},
-  {text: "You have no money (They have nothing to take you are finally free) – no rent.", func(player){
-    player.noRentCard = true;
-    updatePlayerInfo(player);
-  }},
   {text: "Go to jail - Go directly to jail.", func(player){
     player.inJail = true;
     player.currentField = 10;
@@ -101,10 +95,6 @@ const chanceArr = [{text: "They think they can kick you (Go forward 3 spaces).",
   {text: "Take a walk on Boardwalk (Don’t pay rent).", func(player){
     player.currentField = 39;
     updateMapInfoPlayerPos();
-  }},
-  {text: "Get out of jail, free (This card may be kept until needed).", func(player){
-    player.freeFromJailCard = true;
-    updatePlayerInfo(player);
   }},
   {text: "Bank pays you dividend of 50$.", func(player){
     player.money += 50;
@@ -385,14 +375,14 @@ const trowDice = ()=>{
 let turnTime;
 let turn = 0;
 const yourTurn = (player)=>{
+  player.turnPermission = true;
   io.to(player.socketId).emit("itsYourTurn");
   for (let i of players){
     if (i.id!=player.id){
       io.to(i.socketId).emit("whoseTurn", turn);
+      i.turnPermission=false;
     }
-    i.turnPermission=false;
   }
-  player.turnPermission = true;
   turnTime = setTimeout(()=>{
     console.log("Player"+(turn)+" failed to play in time. Now it's player"+(turn+1)+"'s turn.");
     turn=(turn+1)%4;
@@ -418,7 +408,13 @@ io.on('connection', (socket)=>{
 
   socket.on('moveTheFigure', ()=>{
     const sender = who(socket.id);
-    if (players[sender].turnPermission && turn===sender)
+    if (players[sender].inJail===true){
+      io.to(players[sender].socketId).emit("outOfJail");
+      players[sender].money -= 50;
+      players[sender].inJail = false;
+      updatePlayerInfo(players[sender]);
+    }
+    if (players[sender].turnPermission)
     {
       clearTimeout(turnTime);
       console.log("player"+turn+" moved.");
@@ -520,7 +516,7 @@ io.on('connection', (socket)=>{
         map[players[sender].currentField].fieldData.buyMe(players[sender]);
         let buyMeAnswerTimeout = setTimeout(()=>{
           yourTurn(players[turn]);
-          console.log("Player"+(turn-1)+" failed to play in time. Now it's player"+(turn)+"'s turn.");
+          console.log("Player"+(turn-1)+" did not answer in time. Now it's player"+(turn)+"'s turn.");
         },15000);
         socket.on("buyMe?yes", ()=>{
           if (players[sender].money>=map[players[sender].currentField].fieldData.price){

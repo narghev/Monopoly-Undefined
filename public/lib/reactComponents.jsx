@@ -114,6 +114,8 @@ class Box extends React.Component{
       fontSize: "24px"
     }
     this.src;
+    this.yes = this.yes.bind(this);
+    this.no = this.no.bind(this);
   }
   time(){
     this.t = setTimeout(()=>{
@@ -121,13 +123,13 @@ class Box extends React.Component{
     },7500)
   }
   yes(){
-    clearTimeout(Box.t);
+    clearTimeout(this.t);
     socket.emit("buyMe?yes");
     document.getElementById('blackContainer').removeChild(document.getElementById('blackContainer').childNodes[0]);
     document.getElementById('buyMe?box').removeChild(document.getElementById('buyMe?box').childNodes[0]);
   }
   no(){
-    clearTimeout(Box.t);
+    clearTimeout(this.t);
     socket.emit("buyMe?no");
     document.getElementById('blackContainer').removeChild(document.getElementById('blackContainer').childNodes[0]);
     document.getElementById('buyMe?box').removeChild(document.getElementById('buyMe?box').childNodes[0]);
