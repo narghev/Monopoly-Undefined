@@ -416,14 +416,13 @@ app.get('/', (req, res)=>{
   if (players.length < 4)
     res.sendFile(__dirname + '/public/index.html');
   else{
-    app.use(express.static('public/fullGame'));
     res.sendFile(__dirname + '/public/fullGame/index.html');
   }
 });
 
-app.get('/public/help/', (req, res)=>{
+/*app.get('/public/help/', (req, res)=>{
   res.sendFile(__dirname + '/public/help/index.html');
-});
+});*/
 
 app.use(express.static('public'));
 
