@@ -393,9 +393,10 @@ const trowDice = ()=>{
   return (1+Math.floor(Math.random()*6));
 }
 
-let turnTime;
+var turnTime;
 let turn = 0;
 const yourTurn = (player)=>{
+  clearTimeout(turnTime);
   player.turnPermission = true;
   io.to(player.socketId).emit("itsYourTurn");
   for (let i of players){
@@ -432,6 +433,7 @@ io.on('connection', (socket)=>{
   socket.on('moveTheFigure', ()=>{
     const sender = who(socket.id);
     if (gameOver()){
+      console.log("the game is over");
       io.to(winner().socketId).emit("over");
     }
     if (players[sender].money>0){
@@ -460,6 +462,8 @@ io.on('connection', (socket)=>{
       players[sender].currentField = 20;
       updateMapInfoPlayerPos();
       io.to(players[sender].socketId).emit("broke");
+      turn=(turn+1)%4;
+      yourTurn(players[turn]);
     }
   });
   socket.on("addHouse", (n)=>{
@@ -674,5 +678,8 @@ io.on('connection', (socket)=>{
     else {
       yourTurn(players[turn]);
     }
+  });
+  socket.on("hNhN", (n)=>{
+    socket.emit("gethNhN", [map[n].fieldData.houses, map[n].fieldData.hotel]);
   });
 });

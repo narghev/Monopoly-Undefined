@@ -14,7 +14,6 @@ renderMainDropDown();
 socket.on("playerInfoUpdate", (playerData)=>{
   window.money = JSON.parse(playerData).socketMoney; //has to be in the player information, top left corner, REACT
   window.property = JSON.parse(playerData).socketProperty; //has to be in the player information, top left corner, REACT
-  console.log (property)
   renderMoney();
   renderPropertyDropDown();
 });
@@ -66,6 +65,10 @@ window.onload = ()=>{
     outOfJail();
   });
   socket.on("broke", ()=>{
-    alert();
+  });
+  socket.on("gethNhN", (arr)=>{
+    window.houseN = arr[0];
+    window.hotelN = arr[1];
+    renderPropertyInfo();
   });
 }

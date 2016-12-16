@@ -174,20 +174,25 @@ class PropertyInfo extends React.Component {
   }
   addHouse(){
     socket.emit("addHouse", document.getElementById("propertyDropDown").childNodes[0].options[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].text.split('.')[0]*1);
+    socket.emit("hNhN", document.getElementById("propertyDropDown").childNodes[0].options[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].text.split('.')[0]*1);
   }
   render(){
-    this.houseN = property[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].houses;
-    this.hotelN = property[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].hotels;
+    this.houseN = houseN;
+    this.hotelN = hotelN;
     return(
       <div>
         <img src="../imgs/house.png" style={{width: "75px", height: "75px", position: "absolute", top: "25vh", right: "17vw"}}/>
         <p style={{position: "absolute",right:" 17.8vw",top: "32vh",fontSize: "30px",fontWeight: "400",color: "#841b1b"}}>{this.houseN}</p>
         <img src="../imgs/hotel.png" style={{width: "75px", height: "75px", position: "absolute", top: "25vh", right: "7vw"}}/>
-        <p style={{position: "absolute",right: "7.9vw",top: "32vh",fontSize: "30px",fontWeight: "400",color: "#841b1b"}}>{this.houseN}</p>
+        <p style={{position: "absolute",right: "7.9vw",top: "32vh",fontSize: "30px",fontWeight: "400",color: "#841b1b"}}>{this.hotelN}</p>
         <img src="../imgs/addHouse.png" onClick={this.addHouse} style={{width: "50px", height: "50px", position: "absolute", height: "75px", top: "26vh"}}/>
       </div>
     )
   }
+}
+
+window.renderPropertyInfo = ()=>{
+  ReactDOM.render(<PropertyInfo/>, document.getElementById('propertyInfo'));
 }
 
 class PropertyDropDown extends React.Component {
@@ -198,7 +203,7 @@ class PropertyDropDown extends React.Component {
   onChange(){
     if (fields[document.getElementById("propertyDropDown").childNodes[0].options[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].text.split('.')[0]*1].housable){
       const selectedField = document.getElementById("propertyDropDown").childNodes[0].selectedIndex;
-      ReactDOM.render(<PropertyInfo/>, document.getElementById('propertyInfo'));
+      socket.emit("hNhN", document.getElementById("propertyDropDown").childNodes[0].options[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].text.split('.')[0]*1);
     }
     }
   render() {
