@@ -18,7 +18,9 @@ socket.on("playerInfoUpdate", (playerData)=>{
   renderPropertyDropDown();
 });
 socket.on("diceResults", (dice1, dice2)=>{
-  //dice animation
+  window.d1 = dice1;
+  window.d2 = dice2;
+  renderDiceResults();
 });
 socket.on("getTheCard", (text)=>{
   window.cardText = text;

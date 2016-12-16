@@ -1,0 +1,12 @@
+h3{
+	text-align: center;
+	font-size: 75px;
+}
+p{
+	font-size: 30px;
+}
+body{
+	background: url("bg.jpg");
+	background-size: 100%;
+	background-repeat: no-repeat;
+}

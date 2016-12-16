@@ -421,6 +421,10 @@ app.get('/', (req, res)=>{
   }
 });
 
+app.get('/public/help/', (req, res)=>{
+  res.sendFile(__dirname + '/public/help/index.html');
+});
+
 app.use(express.static('public'));
 
 io.on('connection', (socket)=>{

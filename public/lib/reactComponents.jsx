@@ -20,7 +20,7 @@ class Money extends React.Component {
 
 window.renderMoney = ()=>{
   ReactDOM.render(<Money/>, document.getElementById('moneyDiv'));
-}
+};
 
 class MainDropDown extends React.Component {
   constructor(){
@@ -61,7 +61,7 @@ class MainDropDown extends React.Component {
 
 window.renderMainDropDown = ()=>{
   ReactDOM.render(<MainDropDown/>, document.getElementById('mainDropDown'));
-}
+};
 
 class Card extends React.Component {
   constructor (){
@@ -90,7 +90,7 @@ class Card extends React.Component {
 window.showCard = ()=>{
   document.getElementById("blackContainer").appendChild(blackDiv);
   ReactDOM.render(<Card/>, document.getElementById('cardDiv'));
-}
+};
 
 class Box extends React.Component{
   constructor(){
@@ -151,7 +151,7 @@ class Box extends React.Component{
 window.askPlayer = ()=>{
   document.getElementById("blackContainer").appendChild(blackDiv);
   ReactDOM.render(<Box />, document.getElementById("buyMe?box"));
-}
+};
 
 class MyPic extends React.Component {
   render() {
@@ -163,7 +163,7 @@ class MyPic extends React.Component {
 
 window.renderMyPic = ()=>{
   ReactDOM.render(<MyPic/>, document.getElementById('myPicDiv'));
-}
+};
 
 class PropertyInfo extends React.Component {
   constructor(){
@@ -193,7 +193,7 @@ class PropertyInfo extends React.Component {
 
 window.renderPropertyInfo = ()=>{
   ReactDOM.render(<PropertyInfo/>, document.getElementById('propertyInfo'));
-}
+};
 
 class PropertyDropDown extends React.Component {
   constructor(){
@@ -228,4 +228,26 @@ class PropertyDropDown extends React.Component {
 
 window.renderPropertyDropDown = ()=>{
   ReactDOM.render(<PropertyDropDown/>, document.getElementById('propertyDropDown'));
+};
+
+class DiceResults extends React.Component {
+  constructor (){
+    super();
+    this.dice1;
+    this.dice2;
+  }
+  render() {
+    this.dice1 = d1;
+    this.dice2 = d2;
+    return (
+      <div>
+        <div>{this.dice1}</div>
+        <div>{this.dice2}</div>
+      </div>
+    )
+  }
 }
+
+window.renderDiceResults = ()=>{
+  ReactDOM.render(<DiceResults/>, document.getElementById('diceResults'));
+};
