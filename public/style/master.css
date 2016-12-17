@@ -121,3 +121,18 @@ select{
   top: 0%;
   left: 82vw;
 }
+#diceResults{
+    position: absolute;
+    left: 825px;
+    top: 27%;
+    font-style: italic;
+    background-color: rgba(206, 161, 43, 0.62);
+    display: inline-block;
+    border: solid;
+    padding: 10px 10px 10px 10px;
+    border-radius: 1em;
+    width: 71px;
+    overflow: hidden;
+    font-size: xx-large;
+    color: #841b1b;
+}
