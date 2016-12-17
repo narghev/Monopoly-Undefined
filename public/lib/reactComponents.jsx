@@ -185,7 +185,7 @@ class PropertyInfo extends React.Component {
         <p style={{position: "absolute",right:" 17.8vw",top: "32vh",fontSize: "30px",fontWeight: "400",color: "#841b1b"}}>{this.houseN}</p>
         <img src="../imgs/hotel.png" style={{width: "75px", height: "75px", position: "absolute", top: "25vh", right: "7vw"}}/>
         <p style={{position: "absolute",right: "7.9vw",top: "32vh",fontSize: "30px",fontWeight: "400",color: "#841b1b"}}>{this.hotelN}</p>
-        <img src="../imgs/addHouse.png" onClick={this.addHouse} style={{width: "50px", height: "50px", position: "absolute", height: "75px", top: "26vh"}}/>
+        <img src="../imgs/addHouse.png" onClick={this.addHouse} style={{width: "50px", height: "50px", position: "absolute", top: "26vh"}}/>
       </div>
     )
   }
@@ -204,6 +204,9 @@ class PropertyDropDown extends React.Component {
     if (fields[document.getElementById("propertyDropDown").childNodes[0].options[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].text.split('.')[0]*1].housable){
       const selectedField = document.getElementById("propertyDropDown").childNodes[0].selectedIndex;
       socket.emit("hNhN", document.getElementById("propertyDropDown").childNodes[0].options[document.getElementById("propertyDropDown").childNodes[0].selectedIndex].text.split('.')[0]*1);
+    }
+    else {
+      document.getElementById('propertyInfo').removeChild(document.getElementById('propertyInfo').childNodes[0]);
     }
     }
   render() {
@@ -235,6 +238,11 @@ class DiceResults extends React.Component {
     super();
     this.dice1;
     this.dice2;
+    this.dice2style = {
+      position: 'absolute',
+      top: '11px',
+      left: '60px'
+    }
   }
   render() {
     this.dice1 = d1;
@@ -242,7 +250,7 @@ class DiceResults extends React.Component {
     return (
       <div>
         <div>{this.dice1}</div>
-        <div>{this.dice2}</div>
+        <div style={this.dice2style}>{this.dice2}</div>
       </div>
     )
   }
